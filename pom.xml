@@ -44,7 +44,7 @@
 			<optional>true</optional>
 		</dependency>
 
-		<!-- SOPORTE PARA BASES DE DATOS (Agregados para JPA y MySQL) -->
+		<!-- SOPORTE PARA BASES DE DATOS (JPA y MySQL) -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -61,12 +61,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>ar.edu.unju.fi.poo.jpa</groupId>
-			<artifactId>ejemploJPA</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-		</dependency>
-	</dependencies>
+	</dependencies> 
 
 	<build>
 		<plugins>
