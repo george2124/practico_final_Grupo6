@@ -10,7 +10,7 @@ import ar.edu.unju.fi.poo.model.Producto;
 import ar.edu.unju.fi.poo.repository.ProductoRepository;
 
 @Service
-public class ProductoService {
+public class ProductoService{
 
     @Autowired
     private ProductoRepository productoRepository;
