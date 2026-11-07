@@ -1,3 +1,4 @@
+
 package ar.edu.unju.fi.poo.service;
 
 import java.util.List;
@@ -10,35 +11,37 @@ import ar.edu.unju.fi.poo.model.Producto;
 import ar.edu.unju.fi.poo.repository.ProductoRepository;
 
 @Service
-public abstract class ProductoService{
+public class ProductoService {
 
     @Autowired
     private ProductoRepository productoRepository;
 
+    // Guardar producto
     public Producto guardarProducto(Producto producto) {
         return productoRepository.save(producto);
     }
 
+    // Buscar producto por ID
     public Producto buscarPorId(Long id) {
         return productoRepository.findById(id)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Producto no encontrado con ID: " + id));
+                .orElseThrow(() ->
+                    new RecursoNoEncontradoException(
+                        "Producto no encontrado con ID: " + id
+                    )
+                );
     }
 
+    // Listar productos con stock crítico
     public List<Producto> listarStockCritico(Integer umbral) {
         return productoRepository.findByStockLessThanEqual(umbral);
     }
 
+    // Listar todos los productos
     public List<Producto> listarTodos() {
         return productoRepository.findAll();
     }
-    
-    abstract List<Producto> findByCategoriaIdAndMarcaAndPrecioBaseBetween(
-    	    Long categoriaId,
-    	    String marca,
-    	    Long precioMin,
-    	    Long precioMax
-    	);
-    
+
+    // Filtrar productos
     public List<Producto> filtrarProductos(
             Long categoriaId,
             String marca,
@@ -46,8 +49,11 @@ public abstract class ProductoService{
             Long precioMax) {
 
         return productoRepository
-            .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
-                categoriaId, marca, precioMin, precioMax
-            );
+                .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+                    categoriaId,
+                    marca,
+                    precioMin,
+                    precioMax
+                );
     }
 }

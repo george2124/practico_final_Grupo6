@@ -11,8 +11,13 @@ import ar.edu.unju.fi.poo.model.Producto;
 @Repository
 public interface ProductoRepository extends JpaRepository<Producto,Long>{
 	 
-	List<Producto> findByCategoriaIdAndMarcaAndPrecioBaseBetween(Long categoriaId, String marca, Long precioMin, Long precioMax);
-
+	List<Producto> findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+		    Long categoriaId,
+		    String marca,
+		    Long precioMin,
+		    Long precioMax
+		);
+	
 	 // Consultar productos con stock crítico o por debajo de un umbral
 	List<Producto> findByStockLessThanEqual(Integer umbralStock);
 }
