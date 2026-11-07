@@ -107,4 +107,7 @@ public abstract class Venta {
 		this.cliente = cliente;
 	}
 	
+	protected Venta() {
+	}
+	
 }
