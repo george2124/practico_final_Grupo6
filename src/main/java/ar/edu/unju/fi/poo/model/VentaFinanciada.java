@@ -54,4 +54,5 @@ public class VentaFinanciada extends Venta {
     public void setCuotas(List<Cuota> cuotas) {
         this.cuotas = cuotas;
     }
+   
 }

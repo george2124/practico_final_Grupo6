@@ -48,16 +48,17 @@ public abstract class Venta {
         detalle.setVenta(this);
     }
 	
-	public Venta(long id, String codigoComprobante, LocalDate fecha, long subtotal, long subTotal2, long total,
-			Cliente cliente) {
-		super();
-		this.id = id;
-		this.codigoComprobante = codigoComprobante;
-		this.fecha = fecha;
-		this.subtotal = subtotal;
-		this.total = total;
-		this.cliente = cliente;
-	}
+    public Venta(long id, String codigoComprobante,
+            LocalDate fecha, long subtotal,
+            long total, Cliente cliente) {
+
+        this.id = id;
+        this.codigoComprobante = codigoComprobante;
+        this.fecha = fecha;
+        this.subtotal = subtotal;
+        this.total = total;
+        this.cliente = cliente;
+    }
 
 	public long getId() {
 		return id;
