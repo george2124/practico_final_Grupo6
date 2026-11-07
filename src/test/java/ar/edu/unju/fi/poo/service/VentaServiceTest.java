@@ -25,6 +25,8 @@ import ar.edu.unju.fi.poo.repository.ClienteRepository;
 import ar.edu.unju.fi.poo.repository.ProductoRepository;
 import ar.edu.unju.fi.poo.repository.VentaRepository;
 
+import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
+
 @ExtendWith(MockitoExtension.class)
 public class VentaServiceTest {
 
@@ -107,4 +109,157 @@ public class VentaServiceTest {
         assertEquals(6, resultado.getCuotas().size()); // Valida que se crearon exactamente las 6 cuotas requeridas
         assertEquals(200L, resultado.getCuotas().get(0).getImporteAPagar()); // 1200 / 6 = 200 por cuota
     }
+    
+
+@Test
+void registrarVentaContadoSinCupon() {
+    when(clienteRepository.findById(1L))
+        .thenReturn(Optional.of(clienteTest));
+
+    when(productoRepository.findById(1L))
+        .thenReturn(Optional.of(productoTest));
+
+    when(productoRepository.save(any(Producto.class)))
+        .thenReturn(productoTest);
+
+    when(ventaRepository.save(any(VentaContado.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(1L, 2)
+    );
+
+    VentaContado resultado = ventaService.registrarVentaContado(
+        "COMP-003", 1L, items, false, 10
+    );
+
+    assertEquals(2000L, resultado.getSubtotal());
+    assertEquals(0L, resultado.getMontoDescuento());
+    assertEquals(2000L, resultado.getTotal());
+}
+
+@Test
+void registrarVentaConClienteInexistente() {
+    when(clienteRepository.findById(99L))
+        .thenReturn(Optional.empty());
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(1L, 1)
+    );
+
+    assertThrows(
+        RecursoNoEncontradoException.class,
+        () -> ventaService.registrarVentaContado(
+            "COMP-004", 99L, items, false, 0
+        )
+    );
+
+    verify(ventaRepository, never()).save(any());
+}
+
+@Test
+void registrarVentaConProductoInexistente() {
+    when(clienteRepository.findById(1L))
+        .thenReturn(Optional.of(clienteTest));
+
+    when(productoRepository.findById(99L))
+        .thenReturn(Optional.empty());
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(99L, 1)
+    );
+
+    assertThrows(
+        RecursoNoEncontradoException.class,
+        () -> ventaService.registrarVentaContado(
+            "COMP-005", 1L, items, false, 0
+        )
+    );
+
+    verify(ventaRepository, never()).save(any());
+}
+
+@Test
+void registrarVentaFinanciadaConStockInsuficiente() {
+    when(clienteRepository.findById(1L))
+        .thenReturn(Optional.of(clienteTest));
+
+    when(productoRepository.findById(1L))
+        .thenReturn(Optional.of(productoTest));
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(1L, 20)
+    );
+
+    assertThrows(
+        StockInsuficienteException.class,
+        () -> ventaService.registrarVentaFinanciada(
+            "COMP-006", 1L, items, 20
+        )
+    );
+
+    verify(ventaRepository, never()).save(any());
+}
+
+@Test
+void ventaContadoActualizaElStock() {
+    when(clienteRepository.findById(1L))
+        .thenReturn(Optional.of(clienteTest));
+
+    when(productoRepository.findById(1L))
+        .thenReturn(Optional.of(productoTest));
+
+    when(productoRepository.save(any(Producto.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
+
+    when(ventaRepository.save(any(VentaContado.class)))
+        .thenAnswer(invocation -> invocation.getArgument(0));
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(1L, 3)
+    );
+
+    ventaService.registrarVentaContado(
+        "COMP-007", 1L, items, false, 0
+    );
+
+    assertEquals(7, productoTest.getStock());
+}
+
+@Test
+void ventaFinanciadaGeneraCuotasAdeudadas() {
+    when(clienteRepository.findById(1L))
+        .thenReturn(Optional.of(clienteTest));
+
+    when(productoRepository.findById(1L))
+        .thenReturn(Optional.of(productoTest));
+
+    when(productoRepository.save(any(Producto.class)))
+        .thenReturn(productoTest);
+
+    when(ventaRepository.save(any(VentaFinanciada.class)))
+        .thenAnswer(invocation -> {
+            VentaFinanciada venta = invocation.getArgument(0);
+            venta.setId(10L);
+            return venta;
+        });
+
+    var items = Collections.singletonList(
+        new VentaService.ItemCompraDTO(1L, 1)
+    );
+
+    VentaFinanciada resultado =
+        ventaService.registrarVentaFinanciada(
+            "COMP-008", 1L, items, 20
+        );
+
+    assertEquals(6, resultado.getCuotas().size());
+
+    resultado.getCuotas().forEach(cuota ->
+        assertEquals(
+            ar.edu.unju.fi.poo.enums.EstadoCuota.ADEUDADA,
+            cuota.getEstado()
+    )
+   );
+ } 
 }
