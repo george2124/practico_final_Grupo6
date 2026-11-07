@@ -41,5 +41,8 @@ public class VentaContado extends Venta {
 		 this.montoDescuento = montoDescuento;
 	 }
 	 
+	 public VentaContado() {
+		    super();
+		}
 	 
 }
