@@ -10,7 +10,7 @@ import ar.edu.unju.fi.poo.model.Producto;
 import ar.edu.unju.fi.poo.repository.ProductoRepository;
 
 @Service
-public class ProductoService{
+public abstract class ProductoService{
 
     @Autowired
     private ProductoRepository productoRepository;
@@ -30,5 +30,24 @@ public class ProductoService{
 
     public List<Producto> listarTodos() {
         return productoRepository.findAll();
+    }
+    
+    abstract List<Producto> findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+    	    Long categoriaId,
+    	    String marca,
+    	    Long precioMin,
+    	    Long precioMax
+    	);
+    
+    public List<Producto> filtrarProductos(
+            Long categoriaId,
+            String marca,
+            Long precioMin,
+            Long precioMax) {
+
+        return productoRepository
+            .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+                categoriaId, marca, precioMin, precioMax
+            );
     }
 }
