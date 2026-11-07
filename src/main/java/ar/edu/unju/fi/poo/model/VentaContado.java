@@ -20,7 +20,7 @@ public class VentaContado extends Venta {
 
 	 public VentaContado(long id, String codigoComprobante, LocalDate fecha, long subtotal, long subTotal2, long total,
 			Cliente cliente, Boolean cuponDescuentoValido, long montoDescuento) {
-		super(id, codigoComprobante, fecha, subtotal, subTotal2, total, cliente);
+		super(id, codigoComprobante, fecha, subtotal, total, cliente);
 		this.cuponDescuentoValido = cuponDescuentoValido;
 		this.montoDescuento = montoDescuento;
 	 }
