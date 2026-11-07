@@ -107,4 +107,30 @@ class ProductoServiceTest {
         assertEquals(1, resultado.size());
         verify(productoRepository).findAll();
     }
+    
+
+	@Test
+	void filtrarProductosExitosamente() {
+	
+	    when(productoRepository
+	        .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+	            1L, "Samsung", 80000L, 120000L
+	        ))
+	        .thenReturn(Arrays.asList(producto));
+	
+	    List<Producto> resultado =
+	        productoService.filtrarProductos(
+	            1L, "Samsung", 80000L, 120000L
+	        );
+	
+	    assertNotNull(resultado);
+	    assertEquals(1, resultado.size());
+	    assertEquals("Samsung", resultado.get(0).getMarca());
+	
+	    verify(productoRepository)
+	        .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+	            1L, "Samsung", 80000L, 120000L
+	        );
+	}
+
 }
