@@ -43,6 +43,13 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- Herramientas de desarrollo para modulo web -->
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 
 		<!-- SOPORTE PARA BASES DE DATOS (JPA y MySQL) -->
 		<dependency>
@@ -53,6 +60,13 @@
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
+		</dependency>
+		
+		<!-- Dependencia para usar Lombok -->
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok</artifactId>
+    		<optional>true</optional>
 		</dependency>
 
 		<!-- Dependencia para Pruebas Unitarias -->
