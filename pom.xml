@@ -43,6 +43,13 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- Herramientas de desarrollo para modulo web -->
+		<dependency>
+    		<groupId>org.springframework.boot</groupId>
+    		<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+
 
 		<!-- SOPORTE PARA BASES DE DATOS (JPA y MySQL) -->
 		<dependency>
