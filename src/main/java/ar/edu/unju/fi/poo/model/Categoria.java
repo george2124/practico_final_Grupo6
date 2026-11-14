@@ -24,6 +24,10 @@ public class Categoria {
 	 @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL)
 	 private List<Producto> productos;
 
+	 public Categoria() {
+		 
+	 }
+
 	 public Categoria(Long id, String nombre, List<Producto> productos) {
 		super();
 		this.id = id;
