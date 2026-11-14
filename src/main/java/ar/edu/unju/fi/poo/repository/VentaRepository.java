@@ -9,6 +9,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import ar.edu.unju.fi.poo.model.Venta;
+import ar.edu.unju.fi.poo.model.VentaContado;
+import ar.edu.unju.fi.poo.model.VentaFinanciada;
 
 @Repository
 public interface VentaRepository extends JpaRepository<Venta,Long> {
@@ -22,4 +24,11 @@ public interface VentaRepository extends JpaRepository<Venta,Long> {
     // Filtrar ventas según la modalidad de pago utilizada (Contado o Financiada) usando JPQL
     @Query("SELECT v FROM Venta v WHERE TYPE(v) = :tipoVenta")
     List<Venta> findByModalidadPago(@Param("tipoVenta") Class<? extends Venta> tipoVenta);
+
+    // Consultas por modalidad (subclases de la herencia JOINED)
+    @Query("SELECT v FROM VentaContado v")
+    List<VentaContado> findAllContado();
+
+    @Query("SELECT v FROM VentaFinanciada v")
+    List<VentaFinanciada> findAllFinanciadas();
 }

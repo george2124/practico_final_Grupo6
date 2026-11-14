@@ -108,6 +108,14 @@ public abstract class Venta {
 		this.cliente = cliente;
 	}
 	
+	public List<DetalleVenta> getDetalles() {
+		return detalles;
+	}
+
+	public void setDetalles(List<DetalleVenta> detalles) {
+		this.detalles = detalles;
+	}
+	
 	protected Venta() {
 	}
 	
