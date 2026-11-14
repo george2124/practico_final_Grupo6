@@ -9,135 +9,63 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
-
 
 @Entity
-@Table(name = "clientes", uniqueConstraints = {
-    @UniqueConstraint(columnNames = "identificacion"),
-    @UniqueConstraint(columnNames = "email")
-})
+@Table(name = "clientes")
 public class Cliente {
-	 @Id
-	 @GeneratedValue(strategy = GenerationType.IDENTITY)
-	 private Long id;
 
-	 @Column(nullable = false, length = 20)
-	 private String identificacion; // DNI o CUIT
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	 @Column(nullable = false, length = 100)
-	 private String nombre;
+    private String identificacion;
+    private String nombre;
+    private String apellidoRazonSocial;
+    private String telefono;
+    private String email;
+    private String direccion;
 
-	 @Column(name = "apellido_razon_social", nullable = false, length = 150)
-	 private String apellidoRazonSocial;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_cliente", nullable = false)
+    private TipoCliente tipoCliente;
 
-	 @Column(length = 20)
-	 private String telefono;
+    public Cliente() {
+    }
 
-	 @Column(nullable = false, length = 100)
-	 private String email;
+    public Cliente(Long id, String identificacion, String nombre, String apellidoRazonSocial, 
+                   String telefono, String email, String direccion, TipoCliente tipoCliente) {
+        this.id = id;
+        this.identificacion = identificacion;
+        this.nombre = nombre;
+        this.apellidoRazonSocial = apellidoRazonSocial;
+        this.telefono = telefono;
+        this.email = email;
+        this.direccion = direccion;
+        this.tipoCliente = tipoCliente;
+    }
 
-	 @Column(length = 200)
-	 private String direccion;
+    // Getters y Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-	 @Enumerated(EnumType.STRING)
-	 @Column(name = "tipo_cliente", nullable = false)
-	 private TipoCliente tipoCliente;
+    public String getIdentificacion() { return identificacion; }
+    public void setIdentificacion(String identificacion) { this.identificacion = identificacion; }
 
-	 
-	 public Cliente(Long id, String identificacion, String nombre, String apellidoRazonSocial, String telefono,
-			String email, String direccion, TipoCliente tipoCliente) {
-		super();
-		this.id = id;
-		this.identificacion = identificacion;
-		this.nombre = nombre;
-		this.apellidoRazonSocial = apellidoRazonSocial;
-		this.telefono = telefono;
-		this.email = email;
-		this.direccion = direccion;
-		this.tipoCliente = tipoCliente;
-	 }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
+    public String getApellidoRazonSocial() { return apellidoRazonSocial; }
+    public void setApellidoRazonSocial(String apellidoRazonSocial) { this.apellidoRazonSocial = apellidoRazonSocial; }
 
-	 public Long getId() {
-		 return id;
-	 }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-	 public void setId(Long id) {
-		 this.id = id;
-	 }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-
-	 public String getIdentificacion() {
-		 return identificacion;
-	 }
-
-
-	 public void setIdentificacion(String identificacion) {
-		 this.identificacion = identificacion;
-	 }
-
-
-	 public String getNombre() {
-		 return nombre;
-	 }
-
-
-	 public void setNombre(String nombre) {
-		 this.nombre = nombre;
-	 }
-
-
-	 public String getApellidoRazonSocial() {
-		 return apellidoRazonSocial;
-	 }
-
-
-	 public void setApellidoRazonSocial(String apellidoRazonSocial) {
-		 this.apellidoRazonSocial = apellidoRazonSocial;
-	 }
-
-
-	 public String getTelefono() {
-		 return telefono;
-	 }
-
-
-	 public void setTelefono(String telefono) {
-		 this.telefono = telefono;
-	 }
-
-
-	 public String getEmail() {
-		 return email;
-	 }
-
-
-	 public void setEmail(String email) {
-		 this.email = email;
-	 }
-
-
-	 public String getDireccion() {
-		 return direccion;
-	 }
-
-
-	 public void setDireccion(String direccion) {
-		 this.direccion = direccion;
-	 }
-
-
-	 public TipoCliente getTipoCliente() {
-		 return tipoCliente;
-	 }
-
-
-	 public void setTipoCliente(TipoCliente tipoCliente) {
-		 this.tipoCliente = tipoCliente;
-	 }
-
-	
-	
+    public TipoCliente getTipoCliente() { return tipoCliente; }
+    public void setTipoCliente(TipoCliente tipoCliente) { this.tipoCliente = tipoCliente; }
 }

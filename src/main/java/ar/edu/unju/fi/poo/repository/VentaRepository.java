@@ -13,7 +13,7 @@ import ar.edu.unju.fi.poo.model.VentaContado;
 import ar.edu.unju.fi.poo.model.VentaFinanciada;
 
 @Repository
-public interface VentaRepository extends JpaRepository<Venta,Long> {
+public interface VentaRepository extends JpaRepository<Venta, Long> {
 	
 	// Historial de ventas asociadas a un cliente en particular
     List<Venta> findByClienteId(Long clienteId);
@@ -25,10 +25,12 @@ public interface VentaRepository extends JpaRepository<Venta,Long> {
     @Query("SELECT v FROM Venta v WHERE TYPE(v) = :tipoVenta")
     List<Venta> findByModalidadPago(@Param("tipoVenta") Class<? extends Venta> tipoVenta);
 
+
     // Consultas por modalidad (subclases de la herencia JOINED)
     @Query("SELECT v FROM VentaContado v")
     List<VentaContado> findAllContado();
 
     @Query("SELECT v FROM VentaFinanciada v")
     List<VentaFinanciada> findAllFinanciadas();
+
 }

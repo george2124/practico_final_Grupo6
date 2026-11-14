@@ -18,6 +18,7 @@ import ar.edu.unju.fi.poo.enums.TipoCliente;
 import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
 import ar.edu.unju.fi.poo.model.Cliente;
 import ar.edu.unju.fi.poo.repository.ClienteRepository;
+import ar.edu.unju.fi.poo.service.impl.ClienteServiceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ClienteServiceTest {
@@ -26,7 +27,7 @@ class ClienteServiceTest {
     private ClienteRepository clienteRepository;
 
     @InjectMocks
-    private ClienteService clienteService;
+    private ClienteServiceImpl clienteService;
 
     private Cliente cliente;
 
@@ -62,8 +63,7 @@ class ClienteServiceTest {
         when(clienteRepository.findByIdentificacion("12345678"))
             .thenReturn(Optional.of(cliente));
 
-        Cliente resultado =
-            clienteService.buscarPorIdentificacion("12345678");
+        Cliente resultado = clienteService.buscarPorIdentificacion("12345678");
 
         assertNotNull(resultado);
         assertEquals("12345678", resultado.getIdentificacion());
@@ -87,8 +87,7 @@ class ClienteServiceTest {
                 "Juan", "Juan"
             )).thenReturn(Arrays.asList(cliente));
 
-        List<Cliente> resultado =
-            clienteService.buscarPorNombreOrRazonSocial("Juan");
+        List<Cliente> resultado = clienteService.buscarPorNombreOrRazonSocial("Juan");
 
         assertEquals(1, resultado.size());
         assertEquals("Juan", resultado.get(0).getNombre());
