@@ -1,6 +1,10 @@
 package ar.edu.unju.fi.poo.model;
 
+import ar.edu.unju.fi.poo.enums.TipoCliente;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -14,102 +18,54 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String identificacion;
     private String nombre;
     private String apellidoRazonSocial;
-    private String tipoDocumento;
-    private String identificacion;
     private String telefono;
     private String email;
-    private String ciudad;
-    private String tipoCliente; // O podes ajustarlo según tu modelo
+    private String direccion;
 
-    // Constructor vacío (necesario para JPA y frameworks)
+    @Enumerated(EnumType.STRING)
+    @Column(name = "tipo_cliente", nullable = false)
+    private TipoCliente tipoCliente;
+
     public Cliente() {
     }
 
-    // Constructor con todos los parámetros
-    public Cliente(Long id, String nombre, String apellidoRazonSocial, String tipoDocumento, 
-                   String identificacion, String telefono, String email, String ciudad) {
+    public Cliente(Long id, String identificacion, String nombre, String apellidoRazonSocial, 
+                   String telefono, String email, String direccion, TipoCliente tipoCliente) {
         this.id = id;
+        this.identificacion = identificacion;
         this.nombre = nombre;
         this.apellidoRazonSocial = apellidoRazonSocial;
-        this.tipoDocumento = tipoDocumento;
-        this.identificacion = identificacion;
         this.telefono = telefono;
         this.email = email;
-        this.ciudad = ciudad;
+        this.direccion = direccion;
+        this.tipoCliente = tipoCliente;
     }
 
     // Getters y Setters
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getIdentificacion() { return identificacion; }
+    public void setIdentificacion(String identificacion) { this.identificacion = identificacion; }
 
-    public String getNombre() {
-        return nombre;
-    }
+    public String getNombre() { return nombre; }
+    public void setNombre(String nombre) { this.nombre = nombre; }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
-    }
+    public String getApellidoRazonSocial() { return apellidoRazonSocial; }
+    public void setApellidoRazonSocial(String apellidoRazonSocial) { this.apellidoRazonSocial = apellidoRazonSocial; }
 
-    public String getApellidoRazonSocial() {
-        return apellidoRazonSocial;
-    }
+    public String getTelefono() { return telefono; }
+    public void setTelefono(String telefono) { this.telefono = telefono; }
 
-    public void setApellidoRazonSocial(String apellidoRazonSocial) {
-        this.apellidoRazonSocial = apellidoRazonSocial;
-    }
+    public String getEmail() { return email; }
+    public void setEmail(String email) { this.email = email; }
 
-    public String getTipoDocumento() {
-        return tipoDocumento;
-    }
+    public String getDireccion() { return direccion; }
+    public void setDireccion(String direccion) { this.direccion = direccion; }
 
-    public void setTipoDocumento(String tipoDocumento) {
-        this.tipoDocumento = tipoDocumento;
-    }
-
-    public String getIdentificacion() {
-        return identificacion;
-    }
-
-    public void setIdentificacion(String identificacion) {
-        this.identificacion = identificacion;
-    }
-
-    public String getTelefono() {
-        return telefono;
-    }
-
-    public void setTelefono(String telefono) {
-        this.telefono = telefono;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getCiudad() {
-        return ciudad;
-    }
-
-    public void setCiudad(String ciudad) {
-        this.ciudad = ciudad;
-    }
-
-    public String getTipoCliente() {
-        return tipoCliente;
-    }
-
-    public void setTipoCliente(String tipoCliente) {
-        this.tipoCliente = tipoCliente;
-    }
+    public TipoCliente getTipoCliente() { return tipoCliente; }
+    public void setTipoCliente(TipoCliente tipoCliente) { this.tipoCliente = tipoCliente; }
 }

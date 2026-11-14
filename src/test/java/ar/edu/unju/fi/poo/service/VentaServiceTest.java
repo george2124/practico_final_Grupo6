@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.edu.unju.fi.poo.enums.TipoCliente;
 import ar.edu.unju.fi.poo.model.Cliente;
 import ar.edu.unju.fi.poo.model.VentaContado;
 import ar.edu.unju.fi.poo.model.VentaFinanciada;
@@ -35,8 +36,17 @@ class VentaServiceTest {
 
     @BeforeEach
     void setUp() {
-        // Inicializamos el cliente usando los valores de su constructor original
-        cliente = new Cliente(1L, "Juan", "Perez", "DNI", "12345678", "3884123456", "juan@mail.com", "San Pedro");
+        // Inicializamos el cliente con los 8 parámetros exactos del constructor actualizado
+        cliente = new Cliente(
+            1L,
+            "12345678",
+            "Juan",
+            "Perez",
+            "3884123456",
+            "juan@mail.com",
+            "San Pedro",
+            TipoCliente.PARTICULAR
+        );
 
         ventaContado = new VentaContado();
         ventaContado.setId(1L);
