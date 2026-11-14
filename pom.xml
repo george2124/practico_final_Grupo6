@@ -54,6 +54,13 @@
 			<artifactId>mysql-connector-j</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+		<!-- Dependencia para usar Lombok -->
+		<dependency>
+    		<groupId>org.projectlombok</groupId>
+    		<artifactId>lombok</artifactId>
+    		<optional>true</optional>
+		</dependency>
 
 		<!-- Dependencia para Pruebas Unitarias -->
 		<dependency>
