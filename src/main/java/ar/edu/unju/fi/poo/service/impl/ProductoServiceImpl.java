@@ -51,4 +51,15 @@ public class ProductoServiceImpl implements ProductoService {
     public List<Producto> consultarStockCritico(Integer umbral) {
         return productoRepository.findByStockLessThanEqual(umbral);
     }
+    
+    @Override
+    public List<Producto> listarStockCritico(Integer umbral) {
+        return productoRepository.findByStockLessThanEqual(umbral);
+    }
+
+    @Override
+    public List<Producto> filtrarProductos(Long categoriaId, String marca, Long precioMin, Long precioMax) {
+        // Podés usar una consulta personalizada en el repositorio o filtrar mediante queries de Spring Data JPA
+        return productoRepository.filtrarCustom(categoriaId, marca, precioMin, precioMax);
+    }
 }

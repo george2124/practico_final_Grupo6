@@ -21,4 +21,8 @@ public interface ProductoService {
     
     List<Producto> consultarStockCritico(Integer umbral);
     
+    List<Producto> listarStockCritico(Integer umbral);
+    
+    List<Producto> filtrarProductos(Long categoriaId, String marca, Long precioMin, Long precioMax);
+    
 }
