@@ -225,7 +225,20 @@ void ventaContadoActualizaElStock() {
 
     assertEquals(7, productoTest.getStock());
 }
+@Test
+void consultarVentaPorIdExitosa() {
+    VentaContado ventaEsperada = new VentaContado();
+    ventaEsperada.setId(1L);
+    ventaEsperada.setCodigoComprobante("COMP-001");
 
+    when(ventaRepository.findById(1L)).thenReturn(Optional.of(ventaEsperada));
+
+    Venta resultado = ventaService.consultarVentaPorId(1L); // O el método que use tu servicio
+
+    assertNotNull(resultado);
+    assertEquals("COMP-001", resultado.getCodigoComprobante());
+    verify(ventaRepository, times(1)).findById(1L);
+}
 @Test
 void ventaFinanciadaGeneraCuotasAdeudadas() {
     when(clienteRepository.findById(1L))
