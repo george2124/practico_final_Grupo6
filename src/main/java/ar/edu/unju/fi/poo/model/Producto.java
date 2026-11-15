@@ -49,6 +49,10 @@ public class Producto {
 		this.categoria = categoria;
 	 }
 
+	 public Producto() {
+		// TODO Auto-generated constructor stub
+	}
+
 	 public Long getId() {
 		 return id;
 	 }
