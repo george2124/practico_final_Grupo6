@@ -104,4 +104,16 @@ class VentaServiceTest {
         assertEquals(2, resultado.size());
         verify(ventaRepository).findByFechaBetween(hoy.minusDays(1), hoy.plusDays(1));
     }
+    
+    @Test
+    void filtrarPorModalidadExitosamente() {
+        when(ventaRepository.findByModalidadPago(VentaContado.class))
+            .thenReturn(Arrays.asList(ventaContado));
+
+        List<?> resultado = ventaService.filtrarPorModalidad("CONTADO");
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.size());
+        verify(ventaRepository).findByModalidadPago(VentaContado.class);
+    }
 }
