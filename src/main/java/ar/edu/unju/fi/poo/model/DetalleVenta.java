@@ -47,6 +47,10 @@ public class DetalleVenta {
 		this.venta = venta;
 	}
 
+	public DetalleVenta() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Long getId() {
 		return id;
 	}
