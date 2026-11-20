@@ -1,9 +1,9 @@
 package ar.edu.unju.fi.poo.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
-import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +15,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import ar.edu.unju.fi.poo.dto.ProductoRequestDTO;
+import ar.edu.unju.fi.poo.dto.ProductoResponseDTO;
 import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
 import ar.edu.unju.fi.poo.model.Categoria;
 import ar.edu.unju.fi.poo.model.Producto;
@@ -31,42 +33,65 @@ class ProductoServiceTest {
     private ProductoServiceImpl productoService;
 
     private Producto producto;
+    private ProductoRequestDTO requestDTO;
 
     @BeforeEach
     void setUp() {
         Categoria categoria = new Categoria(1L, "Electrodomesticos", null);
 
-        // Usamos el constructor original de tu entidad Producto
         producto = new Producto(
             1L,
             "Televisor",
             "Smart TV 32 pulgadas",
             "Samsung",
             10,
-            100000L, // Manteniendo Long como lo tenías originalmente
+            100000L,
             categoria
+        );
+
+        requestDTO = new ProductoRequestDTO(
+            "Televisor",
+            "Smart TV 32 pulgadas",
+            "Samsung",
+            10,
+            100000L,
+            1L
         );
     }
 
     @Test
     void guardarProductoExitosamente() {
-        when(productoRepository.save(producto)).thenReturn(producto);
+        when(productoRepository.save(any(Producto.class))).thenReturn(producto);
 
-        Producto resultado = productoService.guardarProducto(producto);
+        ProductoResponseDTO resultado = productoService.guardarProducto(requestDTO);
 
         assertNotNull(resultado);
         assertEquals("Televisor", resultado.getNombre());
         assertEquals(100000L, resultado.getPrecioBase());
 
-        verify(productoRepository).save(producto);
+        verify(productoRepository).save(any(Producto.class));
+    }
+
+    @Test
+    void actualizarProductoExitosamente() {
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
+        when(productoRepository.save(any(Producto.class))).thenReturn(producto);
+
+        ProductoResponseDTO resultado = productoService.actualizarProducto(1L, requestDTO);
+
+        assertNotNull(resultado);
+        assertEquals(1L, resultado.getId());
+        assertEquals("Televisor", resultado.getNombre());
+
+        verify(productoRepository).findById(1L);
+        verify(productoRepository).save(any(Producto.class));
     }
 
     @Test
     void buscarProductoPorIdExitosamente() {
         when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
 
-        // Ajustado al método Optional que devuelve tu servicio impl
-        Producto resultado = productoService.buscarPorId(1L).orElse(null);
+        ProductoResponseDTO resultado = productoService.buscarPorId(1L);
 
         assertNotNull(resultado);
         assertEquals(1L, resultado.getId());
@@ -78,7 +103,7 @@ class ProductoServiceTest {
 
         assertThrows(
             RecursoNoEncontradoException.class,
-            () -> productoService.buscarPorId(99L).orElseThrow(() -> new RecursoNoEncontradoException("No encontrado"))
+            () -> productoService.buscarPorId(99L)
         );
     }
 
@@ -87,7 +112,7 @@ class ProductoServiceTest {
         when(productoRepository.findByStockLessThanEqual(5))
             .thenReturn(Arrays.asList(producto));
 
-        List<Producto> resultado = productoService.consultarStockCritico(5);
+        List<ProductoResponseDTO> resultado = productoService.listarStockCritico(5);
 
         assertEquals(1, resultado.size());
         verify(productoRepository).findByStockLessThanEqual(5);
@@ -97,21 +122,19 @@ class ProductoServiceTest {
     void listarTodosLosProductos() {
         when(productoRepository.findAll()).thenReturn(Arrays.asList(producto));
 
-        List<Producto> resultado = productoService.listarTodos();
+        List<ProductoResponseDTO> resultado = productoService.listarTodos();
 
         assertEquals(1, resultado.size());
         verify(productoRepository).findAll();
     }
-    
+
     @Test
     void filtrarProductosExitosamente() {
-        // Coincidiendo exactamente con los Long de tu repositorio original
         when(productoRepository.findByCategoriaIdAndMarcaAndPrecioBaseBetween(
             1L, "Samsung", 80000L, 120000L
         )).thenReturn(Arrays.asList(producto));
 
-        // Llamamos al método combinado de filtrado que declaraste en tu repositorio
-        List<Producto> resultado = productoRepository.findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+        List<ProductoResponseDTO> resultado = productoService.filtrarProductos(
             1L, "Samsung", 80000L, 120000L
         );
 
