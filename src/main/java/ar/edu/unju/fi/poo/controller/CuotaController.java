@@ -1,4 +1,4 @@
-package ar.edu.unju.fi.controller; 
+package ar.edu.unju.fi.poo.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
