@@ -1,10 +1,23 @@
 package ar.edu.unju.fi.poo.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Detalle de un producto incluido dentro de una venta")
 public class DetalleVentaResponseDTO {
+
+	@Schema(description = "ID del producto vendido", example = "1")
 	private Long productoId;
+
+	@Schema(description = "Nombre del producto vendido", example = "Teclado Mecánico K587")
 	private String productoNombre;
+
+	@Schema(description = "Cantidad de unidades vendidas", example = "2")
 	private Integer cantidad;
+
+	@Schema(description = "Precio unitario aplicado al momento de la venta", example = "65000")
 	private long precioUnitario;
+
+	@Schema(description = "Subtotal del renglón (cantidad por precio unitario)", example = "130000")
 	private long subtotal;
 
 	public DetalleVentaResponseDTO() {
