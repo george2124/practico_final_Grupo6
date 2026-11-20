@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import ar.edu.unju.fi.poo.dto.VentaRequestDTO;
 import ar.edu.unju.fi.poo.dto.VentaResponseDTO;
-import ar.edu.unju.fi.poo.mapper.VentaMapper;
-import ar.edu.unju.fi.poo.model.Venta;
-import ar.edu.unju.fi.poo.model.VentaContado;
-import ar.edu.unju.fi.poo.model.VentaFinanciada;
 import ar.edu.unju.fi.poo.service.VentaService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -44,9 +40,7 @@ public class VentaController {
     })
     @PostMapping("/contado")
     public ResponseEntity<VentaResponseDTO> registrarVentaContado(@RequestBody VentaRequestDTO request) {
-        VentaContado venta = VentaMapper.toVentaContado(request);
-        VentaContado ventaGuardada = ventaService.registrarVentaContado(venta);
-        return ResponseEntity.ok(VentaMapper.toResponse(ventaGuardada));
+        return ResponseEntity.ok(ventaService.registrarVentaContado(request));
     }
 
     @Operation(
@@ -59,9 +53,7 @@ public class VentaController {
     })
     @PostMapping("/financiada")
     public ResponseEntity<VentaResponseDTO> registrarVentaFinanciada(@RequestBody VentaRequestDTO request) {
-        VentaFinanciada venta = VentaMapper.toVentaFinanciada(request);
-        VentaFinanciada ventaGuardada = ventaService.registrarVentaFinanciada(venta);
-        return ResponseEntity.ok(VentaMapper.toResponse(ventaGuardada));
+        return ResponseEntity.ok(ventaService.registrarVentaFinanciada(request));
     }
 
     @Operation(
@@ -70,8 +62,7 @@ public class VentaController {
     )
     @GetMapping
     public ResponseEntity<List<VentaResponseDTO>> listarTodas() {
-        List<Venta> ventas = ventaService.listarTodas();
-        return ResponseEntity.ok(VentaMapper.toResponseList(ventas));
+        return ResponseEntity.ok(ventaService.listarTodas());
     }
 
     @Operation(
@@ -80,8 +71,7 @@ public class VentaController {
     )
     @GetMapping("/cliente/{clienteId}")
     public ResponseEntity<List<VentaResponseDTO>> consultarVentasPorCliente(@PathVariable Long clienteId) {
-        List<Venta> ventas = ventaService.consultarVentasPorCliente(clienteId);
-        return ResponseEntity.ok(VentaMapper.toResponseList(ventas));
+        return ResponseEntity.ok(ventaService.consultarVentasPorCliente(clienteId));
     }
 
     @Operation(
@@ -92,8 +82,7 @@ public class VentaController {
     public ResponseEntity<List<VentaResponseDTO>> consultarVentasPorRangoFechas(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaFin) {
-        List<Venta> ventas = ventaService.consultarVentasPorRangoFechas(fechaInicio, fechaFin);
-        return ResponseEntity.ok(VentaMapper.toResponseList(ventas));
+        return ResponseEntity.ok(ventaService.consultarVentasPorRangoFechas(fechaInicio, fechaFin));
     }
 
     @Operation(
@@ -102,7 +91,6 @@ public class VentaController {
     )
     @GetMapping("/modalidad")
     public ResponseEntity<List<VentaResponseDTO>> filtrarPorModalidad(@RequestParam String modalidad) {
-        List<Venta> ventas = ventaService.filtrarPorModalidad(modalidad);
-        return ResponseEntity.ok(VentaMapper.toResponseList(ventas));
+        return ResponseEntity.ok(ventaService.filtrarPorModalidad(modalidad));
     }
 }
