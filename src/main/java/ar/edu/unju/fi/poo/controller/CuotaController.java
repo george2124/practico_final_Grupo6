@@ -1,4 +1,4 @@
-package ar.edu.unju.fi.controller; // <- ajustá este package al que use tu proyecto
+package ar.edu.unju.fi.controller; 
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
