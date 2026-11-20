@@ -40,6 +40,9 @@ public class Cuota {
     @JoinColumn(name = "venta_financiada_id", nullable = false)
     private VentaFinanciada ventaFinanciada;
 
+    public Cuota() {
+    	
+    }
 	public Cuota(Long id, Integer numeroCuota, long importeAPagar, LocalDate fechaVencimiento, EstadoCuota estado,
 			VentaFinanciada ventaFinanciada) {
 		super();

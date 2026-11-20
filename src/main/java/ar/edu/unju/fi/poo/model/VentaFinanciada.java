@@ -18,6 +18,9 @@ public class VentaFinanciada extends Venta {
 
     @Column(name = "porcentaje_recargo", nullable = false)
     private long porcentajeRecargo;
+    
+    @Column(nullable = false) // SE AGREGA
+    private boolean saldada = false;
 
     // Una venta financiada genera un plan estricto de 6 cuotas consecutivas
     @OneToMany(mappedBy = "ventaFinanciada", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -54,5 +57,13 @@ public class VentaFinanciada extends Venta {
     public void setCuotas(List<Cuota> cuotas) {
         this.cuotas = cuotas;
     }
+
+	public boolean isSaldada() {
+		return saldada;
+	}
+
+	public void setSaldada(boolean saldada) {
+		this.saldada = saldada;
+	}
    
 }
