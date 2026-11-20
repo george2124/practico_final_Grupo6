@@ -2,33 +2,17 @@ package ar.edu.unju.fi.poo.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import ar.edu.unju.fi.poo.dto.ClienteRequestDTO;
+import ar.edu.unju.fi.poo.dto.ClienteResponseDTO;
 
-import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
-import ar.edu.unju.fi.poo.model.Cliente;
-import ar.edu.unju.fi.poo.repository.ClienteRepository;
+public interface ClienteService {
 
-@Service
-public class ClienteService {
+    ClienteResponseDTO guardarCliente(ClienteRequestDTO request);
 
-    @Autowired
-    private ClienteRepository clienteRepository;
+    ClienteResponseDTO buscarPorIdentificacion(String identificacion);
 
-    public Cliente guardarCliente(Cliente cliente) {
-        return clienteRepository.save(cliente);
-    }
+    List<ClienteResponseDTO> buscarPorNombreOrRazonSocial(String termino);
 
-    public Cliente buscarPorIdentificacion(String identificacion) {
-        return clienteRepository.findByIdentificacion(identificacion)
-                .orElseThrow(() -> new RecursoNoEncontradoException("Cliente no encontrado con identificación: " + identificacion));
-    }
+    List<ClienteResponseDTO> listarTodos();
 
-    public List<Cliente> buscarPorNombreOrRazonSocial(String termino) {
-        return clienteRepository.findByNombreContainingIgnoreCaseOrApellidoRazonSocialContainingIgnoreCase(termino, termino);
-    }
-    
-    public List<Cliente> listarTodos() {
-        return clienteRepository.findAll();
-    }
 }
