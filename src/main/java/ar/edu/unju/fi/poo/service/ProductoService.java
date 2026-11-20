@@ -1,59 +1,19 @@
-
 package ar.edu.unju.fi.poo.service;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import ar.edu.unju.fi.poo.dto.ProductoRequestDTO;
+import ar.edu.unju.fi.poo.dto.ProductoResponseDTO;
 
-import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
-import ar.edu.unju.fi.poo.model.Producto;
-import ar.edu.unju.fi.poo.repository.ProductoRepository;
+public interface ProductoService {
 
-@Service
-public class ProductoService {
+    ProductoResponseDTO guardarProducto(ProductoRequestDTO request);
 
-    @Autowired
-    private ProductoRepository productoRepository;
+    ProductoResponseDTO buscarPorId(Long id);
 
-    // Guardar producto
-    public Producto guardarProducto(Producto producto) {
-        return productoRepository.save(producto);
-    }
+    List<ProductoResponseDTO> listarTodos();
 
-    // Buscar producto por ID
-    public Producto buscarPorId(Long id) {
-        return productoRepository.findById(id)
-                .orElseThrow(() ->
-                    new RecursoNoEncontradoException(
-                        "Producto no encontrado con ID: " + id
-                    )
-                );
-    }
+    List<ProductoResponseDTO> listarStockCritico(Integer umbral);
 
-    // Listar productos con stock crítico
-    public List<Producto> listarStockCritico(Integer umbral) {
-        return productoRepository.findByStockLessThanEqual(umbral);
-    }
-
-    // Listar todos los productos
-    public List<Producto> listarTodos() {
-        return productoRepository.findAll();
-    }
-
-    // Filtrar productos
-    public List<Producto> filtrarProductos(
-            Long categoriaId,
-            String marca,
-            Long precioMin,
-            Long precioMax) {
-
-        return productoRepository
-                .findByCategoriaIdAndMarcaAndPrecioBaseBetween(
-                    categoriaId,
-                    marca,
-                    precioMin,
-                    precioMax
-                );
-    }
+    List<ProductoResponseDTO> filtrarProductos(Long categoriaId, String marca, Long precioMin, Long precioMax);
 }
