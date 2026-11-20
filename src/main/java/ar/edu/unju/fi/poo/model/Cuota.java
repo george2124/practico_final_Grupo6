@@ -1,6 +1,5 @@
 package ar.edu.unju.fi.poo.model;
 
-
 import java.time.LocalDate;
 
 import ar.edu.unju.fi.poo.enums.EstadoCuota;
@@ -19,12 +18,13 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "cuotas")
 public class Cuota {
-	@Id
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "numero_cuota", nullable = false)
-    private Integer numeroCuota; // Del 1 al 6
+    private Integer numeroCuota;
 
     @Column(nullable = false)
     private long importeAPagar;
@@ -40,64 +40,67 @@ public class Cuota {
     @JoinColumn(name = "venta_financiada_id", nullable = false)
     private VentaFinanciada ventaFinanciada;
 
-	public Cuota(Long id, Integer numeroCuota, long importeAPagar, LocalDate fechaVencimiento, EstadoCuota estado,
-			VentaFinanciada ventaFinanciada) {
-		super();
-		this.id = id;
-		this.numeroCuota = numeroCuota;
-		this.importeAPagar = importeAPagar;
-		this.fechaVencimiento = fechaVencimiento;
-		this.estado = estado;
-		this.ventaFinanciada = ventaFinanciada;
-	}
+    // Constructor vacío requerido por JPA
+    public Cuota() {
+    }
 
-	public Long getId() {
-		return id;
-	}
+    public Cuota(Long id, Integer numeroCuota,
+                 long importeAPagar, LocalDate fechaVencimiento,
+                 EstadoCuota estado, VentaFinanciada ventaFinanciada) {
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+        this.id = id;
+        this.numeroCuota = numeroCuota;
+        this.importeAPagar = importeAPagar;
+        this.fechaVencimiento = fechaVencimiento;
+        this.estado = estado;
+        this.ventaFinanciada = ventaFinanciada;
+    }
 
-	public Integer getNumeroCuota() {
-		return numeroCuota;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setNumeroCuota(Integer numeroCuota) {
-		this.numeroCuota = numeroCuota;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public long getImporteAPagar() {
-		return importeAPagar;
-	}
+    public Integer getNumeroCuota() {
+        return numeroCuota;
+    }
 
-	public void setImporteAPagar(long importeAPagar) {
-		this.importeAPagar = importeAPagar;
-	}
+    public void setNumeroCuota(Integer numeroCuota) {
+        this.numeroCuota = numeroCuota;
+    }
 
-	public LocalDate getFechaVencimiento() {
-		return fechaVencimiento;
-	}
+    public long getImporteAPagar() {
+        return importeAPagar;
+    }
 
-	public void setFechaVencimiento(LocalDate fechaVencimiento) {
-		this.fechaVencimiento = fechaVencimiento;
-	}
+    public void setImporteAPagar(long importeAPagar) {
+        this.importeAPagar = importeAPagar;
+    }
 
-	public EstadoCuota getEstado() {
-		return estado;
-	}
+    public LocalDate getFechaVencimiento() {
+        return fechaVencimiento;
+    }
 
-	public void setEstado(EstadoCuota estado) {
-		this.estado = estado;
-	}
+    public void setFechaVencimiento(LocalDate fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
+    }
 
-	public VentaFinanciada getVentaFinanciada() {
-		return ventaFinanciada;
-	}
+    public EstadoCuota getEstado() {
+        return estado;
+    }
 
-	public void setVentaFinanciada(VentaFinanciada ventaFinanciada) {
-		this.ventaFinanciada = ventaFinanciada;
-	}
-    
-    
+    public void setEstado(EstadoCuota estado) {
+        this.estado = estado;
+    }
+
+    public VentaFinanciada getVentaFinanciada() {
+        return ventaFinanciada;
+    }
+
+    public void setVentaFinanciada(VentaFinanciada ventaFinanciada) {
+        this.ventaFinanciada = ventaFinanciada;
+    }
 }

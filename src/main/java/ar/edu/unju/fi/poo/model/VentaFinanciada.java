@@ -19,19 +19,32 @@ public class VentaFinanciada extends Venta {
     @Column(name = "porcentaje_recargo", nullable = false)
     private long porcentajeRecargo;
 
-    // Una venta financiada genera un plan estricto de 6 cuotas consecutivas
-    @OneToMany(mappedBy = "ventaFinanciada", cascade = CascadeType.ALL, orphanRemoval = true)
+    // Indica si todas las cuotas de la venta fueron pagadas
+    @Column(nullable = false)
+    private boolean saldada = false;
+
+    // Una venta financiada genera sus cuotas
+    @OneToMany(mappedBy = "ventaFinanciada",
+               cascade = CascadeType.ALL,
+               orphanRemoval = true)
     private List<Cuota> cuotas = new ArrayList<>();
 
     public VentaFinanciada() {
         super();
     }
 
-    public VentaFinanciada(long id, String codigoComprobante, LocalDate fecha, long subtotal, long total,
-            Cliente cliente, long porcentajeRecargo, List<Cuota> cuotas) {
+    public VentaFinanciada(long id, String codigoComprobante,
+                           LocalDate fecha, long subtotal, long total,
+                           Cliente cliente, long porcentajeRecargo,
+                           List<Cuota> cuotas) {
+
         super(id, codigoComprobante, fecha, subtotal, total, cliente);
         this.porcentajeRecargo = porcentajeRecargo;
-        this.cuotas = cuotas;
+        this.cuotas = cuotas != null ? cuotas : new ArrayList<>();
+
+        for (Cuota cuota : this.cuotas) {
+            cuota.setVentaFinanciada(this);
+        }
     }
 
     public void agregarCuota(Cuota cuota) {
@@ -52,7 +65,18 @@ public class VentaFinanciada extends Venta {
     }
 
     public void setCuotas(List<Cuota> cuotas) {
-        this.cuotas = cuotas;
+        this.cuotas = cuotas != null ? cuotas : new ArrayList<>();
+
+        for (Cuota cuota : this.cuotas) {
+            cuota.setVentaFinanciada(this);
+        }
     }
-   
+
+    public boolean isSaldada() {
+        return saldada;
+    }
+
+    public void setSaldada(boolean saldada) {
+        this.saldada = saldada;
+    }
 }
