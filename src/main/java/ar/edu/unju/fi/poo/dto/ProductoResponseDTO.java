@@ -1,16 +1,36 @@
 package ar.edu.unju.fi.poo.dto;
 
-public class ProductoResponseDTO {
-	private Long id;
-    private String nombre;
-    private String descripcion;
-    private String marca;
-    private Integer stock;
-    private long precioBase;
-    private Long categoriaId;
-    private String categoriaNombre; // Añadimos el nombre para facilitar la lectura en el Front
+import io.swagger.v3.oas.annotations.media.Schema;
 
-    public ProductoResponseDTO() {}
+@Schema(description = "Datos devueltos al consultar, crear o actualizar un producto")
+public class ProductoResponseDTO {
+
+	@Schema(description = "ID del producto", example = "1")
+	private Long id;
+
+	@Schema(description = "Nombre del producto", example = "Teclado Mecánico K587")
+	private String nombre;
+
+	@Schema(description = "Descripción del producto", example = "Switch blue, retroiluminado RGB")
+	private String descripcion;
+
+	@Schema(description = "Marca del producto", example = "Redragon")
+	private String marca;
+
+	@Schema(description = "Cantidad disponible en stock", example = "25")
+	private Integer stock;
+
+	@Schema(description = "Precio base unitario", example = "65000")
+	private long precioBase;
+
+	@Schema(description = "ID de la categoría asociada", example = "2")
+	private Long categoriaId;
+
+	@Schema(description = "Nombre de la categoría asociada", example = "Periféricos")
+	private String categoriaNombre;
+
+	public ProductoResponseDTO() {
+	}
 
 	public ProductoResponseDTO(Long id, String nombre, String descripcion, String marca, Integer stock, long precioBase,
 			Long categoriaId, String categoriaNombre) {
@@ -88,6 +108,4 @@ public class ProductoResponseDTO {
 	public void setCategoriaNombre(String categoriaNombre) {
 		this.categoriaNombre = categoriaNombre;
 	}
-    
-    
 }

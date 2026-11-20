@@ -2,83 +2,93 @@ package ar.edu.unju.fi.poo.dto;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Resumen del estado de cuenta de un cliente, incluyendo cuotas pendientes e historial de ventas")
 public class EstadoCuentaResponseDTO {
 
-    private Long clienteId;
-    private String clienteNombre;
+	@Schema(description = "ID del cliente", example = "1")
+	private Long clienteId;
 
-    private int cantidadCuotasPendientes;
-    private long totalAdeudado;
+	@Schema(description = "Nombre completo o razón social del cliente", example = "Lucía Gómez")
+	private String clienteNombre;
 
-    private List<CuotaResponseDTO> cuotasPendientes;
+	@Schema(description = "Cantidad de cuotas pendientes de pago", example = "3")
+	private int cantidadCuotasPendientes;
 
-    // Historial de ventas del cliente
-    private List<VentaResponseDTO> historialVentas;
+	@Schema(description = "Monto total adeudado en cuotas pendientes", example = "45000")
+	private long totalAdeudado;
 
-    public EstadoCuentaResponseDTO() {
-    }
+	@Schema(description = "Listado de cuotas pendientes del cliente")
+	private List<CuotaResponseDTO> cuotasPendientes;
 
-    public EstadoCuentaResponseDTO(
-            Long clienteId,
-            String clienteNombre,
-            int cantidadCuotasPendientes,
-            long totalAdeudado,
-            List<CuotaResponseDTO> cuotasPendientes,
-            List<VentaResponseDTO> historialVentas) {
+	@Schema(description = "Historial de ventas asociadas al cliente")
+	private List<VentaResponseDTO> historialVentas;
 
-        this.clienteId = clienteId;
-        this.clienteNombre = clienteNombre;
-        this.cantidadCuotasPendientes = cantidadCuotasPendientes;
-        this.totalAdeudado = totalAdeudado;
-        this.cuotasPendientes = cuotasPendientes;
-        this.historialVentas = historialVentas;
-    }
+	public EstadoCuentaResponseDTO() {
+	}
 
-    public Long getClienteId() {
-        return clienteId;
-    }
+	public EstadoCuentaResponseDTO(
+			Long clienteId,
+			String clienteNombre,
+			int cantidadCuotasPendientes,
+			long totalAdeudado,
+			List<CuotaResponseDTO> cuotasPendientes,
+			List<VentaResponseDTO> historialVentas) {
 
-    public void setClienteId(Long clienteId) {
-        this.clienteId = clienteId;
-    }
+		this.clienteId = clienteId;
+		this.clienteNombre = clienteNombre;
+		this.cantidadCuotasPendientes = cantidadCuotasPendientes;
+		this.totalAdeudado = totalAdeudado;
+		this.cuotasPendientes = cuotasPendientes;
+		this.historialVentas = historialVentas;
+	}
 
-    public String getClienteNombre() {
-        return clienteNombre;
-    }
+	public Long getClienteId() {
+		return clienteId;
+	}
 
-    public void setClienteNombre(String clienteNombre) {
-        this.clienteNombre = clienteNombre;
-    }
+	public void setClienteId(Long clienteId) {
+		this.clienteId = clienteId;
+	}
 
-    public int getCantidadCuotasPendientes() {
-        return cantidadCuotasPendientes;
-    }
+	public String getClienteNombre() {
+		return clienteNombre;
+	}
 
-    public void setCantidadCuotasPendientes(int cantidadCuotasPendientes) {
-        this.cantidadCuotasPendientes = cantidadCuotasPendientes;
-    }
+	public void setClienteNombre(String clienteNombre) {
+		this.clienteNombre = clienteNombre;
+	}
 
-    public long getTotalAdeudado() {
-        return totalAdeudado;
-    }
+	public int getCantidadCuotasPendientes() {
+		return cantidadCuotasPendientes;
+	}
 
-    public void setTotalAdeudado(long totalAdeudado) {
-        this.totalAdeudado = totalAdeudado;
-    }
+	public void setCantidadCuotasPendientes(int cantidadCuotasPendientes) {
+		this.cantidadCuotasPendientes = cantidadCuotasPendientes;
+	}
 
-    public List<CuotaResponseDTO> getCuotasPendientes() {
-        return cuotasPendientes;
-    }
+	public long getTotalAdeudado() {
+		return totalAdeudado;
+	}
 
-    public void setCuotasPendientes(List<CuotaResponseDTO> cuotasPendientes) {
-        this.cuotasPendientes = cuotasPendientes;
-    }
+	public void setTotalAdeudado(long totalAdeudado) {
+		this.totalAdeudado = totalAdeudado;
+	}
 
-    public List<VentaResponseDTO> getHistorialVentas() {
-        return historialVentas;
-    }
+	public List<CuotaResponseDTO> getCuotasPendientes() {
+		return cuotasPendientes;
+	}
 
-    public void setHistorialVentas(List<VentaResponseDTO> historialVentas) {
-        this.historialVentas = historialVentas;
-    }
+	public void setCuotasPendientes(List<CuotaResponseDTO> cuotasPendientes) {
+		this.cuotasPendientes = cuotasPendientes;
+	}
+
+	public List<VentaResponseDTO> getHistorialVentas() {
+		return historialVentas;
+	}
+
+	public void setHistorialVentas(List<VentaResponseDTO> historialVentas) {
+		this.historialVentas = historialVentas;
+	}
 }

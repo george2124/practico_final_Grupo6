@@ -3,14 +3,30 @@ package ar.edu.unju.fi.poo.dto;
 import java.time.LocalDate;
 
 import ar.edu.unju.fi.poo.enums.EstadoCuota;
+import io.swagger.v3.oas.annotations.media.Schema;
 
+@Schema(description = "Información de una cuota correspondiente a una venta financiada")
 public class CuotaResponseDTO {
+
+	@Schema(description = "ID de la cuota", example = "1")
 	private Long id;
+
+	@Schema(description = "Número correlativo de cuota (1 a 6)", example = "1")
 	private Integer numeroCuota;
+
+	@Schema(description = "Importe a pagar de la cuota", example = "25000")
 	private long importeAPagar;
+
+	@Schema(description = "Fecha de vencimiento de la cuota", example = "2026-12-20")
 	private LocalDate fechaVencimiento;
+
+	@Schema(description = "Estado actual de la cuota", example = "ADEUDADA")
 	private EstadoCuota estado;
+
+	@Schema(description = "ID de la venta financiada asociada", example = "10")
 	private long ventaId;
+
+	@Schema(description = "Código de comprobante de la venta asociada", example = "COMP-A1B2C3D4")
 	private String codigoComprobante;
 
 	public CuotaResponseDTO() {
