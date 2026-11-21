@@ -31,7 +31,7 @@ import ar.edu.unju.fi.poo.repository.ClienteRepository;
 import ar.edu.unju.fi.poo.repository.ProductoRepository;
 import ar.edu.unju.fi.poo.repository.VentaRepository;
 import ar.edu.unju.fi.poo.service.impl.VentaServiceImpl;
-
+import ar.edu.unju.fi.poo.exception.RecursoNoEncontradoException;
 import ar.edu.unju.fi.poo.exception.SolicitudInvalidaException;
 import ar.edu.unju.fi.poo.exception.StockInsuficienteException;
 
@@ -337,4 +337,113 @@ class VentaServiceTest {
         assertThrows(SolicitudInvalidaException.class,
             () -> ventaService.filtrarPorModalidad("TARJETA"));
     }
+    
+
+	@Test
+	void registrarVentaConClienteInexistenteLanzaExcepcion() {
+	
+	    when(clienteRepository.findById(99L))
+	        .thenReturn(Optional.empty());
+	
+	    VentaRequestDTO request = new VentaRequestDTO(
+	        99L,
+	        ModalidadPago.CONTADO,
+	        "COMP-020",
+	        List.of(new ItemVentaRequestDTO(1L, 1)),
+	        false,
+	        0L,
+	        0L
+	    );
+	
+	    assertThrows(
+	        RecursoNoEncontradoException.class,
+	        () -> ventaService.registrarVentaContado(request)
+	    );
+	
+	    verify(ventaRepository, never()).save(any());
+	}
+	
+	@Test
+	void registrarVentaConProductoInexistenteLanzaExcepcion() {
+	
+	    when(clienteRepository.findById(1L))
+	        .thenReturn(Optional.of(cliente));
+	
+	    when(productoRepository.findById(99L))
+	        .thenReturn(Optional.empty());
+	
+	    VentaRequestDTO request = new VentaRequestDTO(
+	        1L,
+	        ModalidadPago.CONTADO,
+	        "COMP-021",
+	        List.of(new ItemVentaRequestDTO(99L, 1)),
+	        false,
+	        0L,
+	        0L
+	    );
+	
+	    assertThrows(
+	        RecursoNoEncontradoException.class,
+	        () -> ventaService.registrarVentaContado(request)
+	    );
+	
+	    verify(ventaRepository, never()).save(any());
+	}
+	
+
+	@Test
+	void registrarVentaConCantidadCeroLanzaExcepcion() {
+	
+	    VentaRequestDTO request = new VentaRequestDTO(
+	        1L,
+	        ModalidadPago.CONTADO,
+	        "COMP-022",
+	        List.of(new ItemVentaRequestDTO(1L, 0)),
+	        false,
+	        0L,
+	        0L
+	    );
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> ventaService.registrarVentaContado(request)
+	    );
+	
+	    verify(clienteRepository, never()).findById(any());
+	    verify(productoRepository, never()).findById(any());
+	    verify(ventaRepository, never()).save(any());
+	}
+
+	@Test
+	void registrarVentaFinanciadaConRecargoNegativoLanzaExcepcion() {
+	
+	    VentaRequestDTO request = new VentaRequestDTO(
+	        1L,
+	        ModalidadPago.FINANCIADA,
+	        "COMP-023",
+	        List.of(new ItemVentaRequestDTO(1L, 1)),
+	        false,
+	        0L,
+	        -10L
+	    );
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> ventaService.registrarVentaFinanciada(request)
+	    );
+	
+	    verify(clienteRepository, never()).findById(any());
+	    verify(ventaRepository, never()).save(any());
+	}
+	
+	@Test
+	void registrarVentaConSolicitudNulaLanzaExcepcion() {
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> ventaService.registrarVentaContado(null)
+	    );
+	
+	    verify(ventaRepository, never()).save(any());
+	}
 }

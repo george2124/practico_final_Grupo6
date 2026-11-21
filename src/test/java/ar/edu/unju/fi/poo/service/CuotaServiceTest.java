@@ -27,6 +27,9 @@ import ar.edu.unju.fi.poo.repository.CuotaRepository;
 import ar.edu.unju.fi.poo.repository.VentaRepository;
 import ar.edu.unju.fi.poo.service.impl.CuotaServiceImpl;
 
+import ar.edu.unju.fi.poo.exception.SolicitudInvalidaException;
+import ar.edu.unju.fi.poo.model.VentaContado;
+
 @ExtendWith(MockitoExtension.class)
 class CuotaServiceTest {
 
@@ -189,4 +192,61 @@ class CuotaServiceTest {
         assertEquals(EstadoCuota.PAGADA, cuota1.getEstado());
         assertTrue(venta.isSaldada());
     }
+    
+
+	@Test
+	void cobrarVentaSinCuotasRegistradasLanzaExcepcion() {
+	
+	    when(ventaRepository.findById(10L))
+	        .thenReturn(Optional.of(venta));
+	
+	    when(cuotaRepository.buscarCuotasPorVenta(10L))
+	        .thenReturn(Collections.emptyList());
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> cuotaService.cobrarSiguienteCuota(10L)
+	    );
+	
+	    verify(cuotaRepository, never()).save(any(Cuota.class));
+	    verify(ventaRepository, never()).save(any());
+	}
+	
+	@Test
+	void cobrarVentaConTodasLasCuotasPagadasLanzaExcepcion() {
+	
+	    cuota1.setEstado(EstadoCuota.PAGADA);
+	
+	    when(ventaRepository.findById(10L))
+	        .thenReturn(Optional.of(venta));
+	
+	    when(cuotaRepository.buscarCuotasPorVenta(10L))
+	        .thenReturn(Collections.singletonList(cuota1));
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> cuotaService.cobrarSiguienteCuota(10L)
+	    );
+	
+	    verify(cuotaRepository, never()).save(any(Cuota.class));
+	    verify(ventaRepository, never()).save(any());
+	}
+	
+	@Test
+	void cobrarVentaDeContadoLanzaExcepcion() {
+	
+	    VentaContado ventaContado = new VentaContado();
+	    ventaContado.setId(20L);
+	
+	    when(ventaRepository.findById(20L))
+	        .thenReturn(Optional.of(ventaContado));
+	
+	    assertThrows(
+	        SolicitudInvalidaException.class,
+	        () -> cuotaService.cobrarSiguienteCuota(20L)
+	    );
+	
+	    verify(cuotaRepository, never()).buscarCuotasPorVenta(any());
+	    verify(cuotaRepository, never()).save(any(Cuota.class));
+	}
 }

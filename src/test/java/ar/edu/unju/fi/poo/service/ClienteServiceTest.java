@@ -48,15 +48,15 @@ class ClienteServiceTest {
             TipoCliente.PARTICULAR
         );
 
-        requestDTO = new ClienteRequestDTO(
-            "12345678",
-            "Juan",
-            "Perez",
-            "3884123456",
-            "juan@mail.com",
-            "San Pedro",
-            TipoCliente.PARTICULAR
-        );
+        requestDTO = new ClienteRequestDTO();
+
+        requestDTO.setIdentificador("12345678");
+        requestDTO.setNombre("Juan");
+        requestDTO.setApellidoRazonSocial("Perez");
+        requestDTO.setTelefono("3884123456");
+        requestDTO.setEmail("juan@mail.com");
+        requestDTO.setDireccion("San Pedro");
+        requestDTO.setTipoCliente(TipoCliente.PARTICULAR);
     }
 
     @Test
@@ -132,4 +132,39 @@ class ClienteServiceTest {
         assertEquals(1, resultado.size());
         verify(clienteRepository).findAll();
     }
+    
+
+	@Test
+	void actualizarClienteInexistenteLanzaExcepcion() {
+	
+	    when(clienteRepository.findById(99L))
+	        .thenReturn(Optional.empty());
+	
+	    assertThrows(
+	        RecursoNoEncontradoException.class,
+	        () -> clienteService.actualizarCliente(99L, requestDTO)
+	    );
+	
+	    verify(clienteRepository).findById(99L);
+	    verify(clienteRepository, never()).save(any(Cliente.class));
+	}
+	
+	@Test
+	void buscarClientesSinResultadosDevuelveListaVacia() {
+	
+	    when(clienteRepository
+	        .findByNombreContainingIgnoreCaseOrApellidoRazonSocialContainingIgnoreCase(
+	            "Inexistente", "Inexistente"
+	        )).thenReturn(Arrays.asList());
+	
+	    List<ClienteResponseDTO> resultado =
+	        clienteService.buscarPorNombreOrRazonSocial("Inexistente");
+	
+	    assertNotNull(resultado);
+	    assertTrue(resultado.isEmpty());
+	
+	    verify(clienteRepository).findByNombreContainingIgnoreCaseOrApellidoRazonSocialContainingIgnoreCase(
+	        "Inexistente", "Inexistente"
+	    );
+	}
 }
