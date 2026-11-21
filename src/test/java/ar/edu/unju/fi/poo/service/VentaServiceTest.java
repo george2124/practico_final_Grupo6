@@ -390,6 +390,7 @@ class VentaServiceTest {
 	    verify(ventaRepository, never()).save(any());
 	}
 	
+
 	@Test
 	void registrarVentaConCantidadCeroLanzaExcepcion() {
 	
@@ -403,20 +404,16 @@ class VentaServiceTest {
 	        0L
 	    );
 	
-	    when(clienteRepository.findById(1L))
-	        .thenReturn(Optional.of(cliente));
-	
-	    when(productoRepository.findById(1L))
-	        .thenReturn(Optional.of(producto));
-	
 	    assertThrows(
 	        SolicitudInvalidaException.class,
 	        () -> ventaService.registrarVentaContado(request)
 	    );
 	
+	    verify(clienteRepository, never()).findById(any());
+	    verify(productoRepository, never()).findById(any());
 	    verify(ventaRepository, never()).save(any());
 	}
-	
+
 	@Test
 	void registrarVentaFinanciadaConRecargoNegativoLanzaExcepcion() {
 	
