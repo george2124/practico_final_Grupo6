@@ -146,4 +146,54 @@ class ProductoServiceTest {
             1L, "Samsung", 80000L, 120000L
         );
     }
+
+	@Test
+	void actualizarProductoInexistenteLanzaExcepcion() {
+	
+	    when(productoRepository.findById(99L))
+	        .thenReturn(Optional.empty());
+	
+	    assertThrows(
+	        RecursoNoEncontradoException.class,
+	        () -> productoService.actualizarProducto(99L, requestDTO)
+	    );
+	
+	    verify(productoRepository).findById(99L);
+	    verify(productoRepository, never()).save(any(Producto.class));
+	}
+	
+	@Test
+	void listarProductosConStockCriticoSinResultados() {
+	
+	    when(productoRepository.findByStockLessThanEqual(5))
+	        .thenReturn(Arrays.asList());
+	
+	    List<ProductoResponseDTO> resultado =
+	        productoService.listarStockCritico(5);
+	
+	    assertNotNull(resultado);
+	    assertTrue(resultado.isEmpty());
+	
+	    verify(productoRepository).findByStockLessThanEqual(5);
+	}
+	
+	@Test
+	void filtrarProductosSinCoincidenciasDevuelveListaVacia() {
+	
+	    when(productoRepository.findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+	        1L, "OtraMarca", 80000L, 120000L
+	    )).thenReturn(Arrays.asList());
+	
+	    List<ProductoResponseDTO> resultado =
+	        productoService.filtrarProductos(
+	            1L, "OtraMarca", 80000L, 120000L
+	        );
+	
+	    assertNotNull(resultado);
+	    assertTrue(resultado.isEmpty());
+	
+	    verify(productoRepository).findByCategoriaIdAndMarcaAndPrecioBaseBetween(
+	        1L, "OtraMarca", 80000L, 120000L
+	    );
+	}
 }
