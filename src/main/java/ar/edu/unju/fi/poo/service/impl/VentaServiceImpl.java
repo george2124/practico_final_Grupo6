@@ -159,17 +159,37 @@ public class VentaServiceImpl implements VentaService {
         return VentaMapper.toResponseList(ventas);
     }
 
-    private void validarSolicitudBase(VentaRequestDTO request) {
-        if (request == null) {
-            throw new SolicitudInvalidaException("La solicitud de venta no puede ser nula");
-        }
-        if (request.getClienteId() == null) {
-            throw new SolicitudInvalidaException("El ID del cliente es obligatorio");
-        }
-        if (request.getItems() == null || request.getItems().isEmpty()) {
-            throw new SolicitudInvalidaException("La venta debe incluir al menos un producto");
-        }
-    }
+
+	private void validarSolicitudBase(VentaRequestDTO request) {
+	
+	    if (request == null) {
+	        throw new SolicitudInvalidaException("La solicitud de venta no puede ser nula");
+	    }
+	
+	    if (request.getClienteId() == null) {
+	        throw new SolicitudInvalidaException("El ID del cliente es obligatorio");
+	    }
+	
+	    if (request.getItems() == null || request.getItems().isEmpty()) {
+	        throw new SolicitudInvalidaException("La venta debe incluir al menos un producto");
+	    }
+	
+	    for (ItemVentaRequestDTO item : request.getItems()) {
+	
+	        if (item == null || item.getProductoId() == null) {
+	            throw new SolicitudInvalidaException(
+	                "Cada ítem de la venta debe indicar un producto válido"
+	            );
+	        }
+	
+	        if (item.getCantidad() == null || item.getCantidad() <= 0) {
+	            throw new SolicitudInvalidaException(
+	                "La cantidad del producto debe ser mayor a cero"
+	            );
+	        }
+	    }
+	}
+
 
     private ModalidadPago parsearModalidad(String modalidad) {
         if (modalidad == null || modalidad.isBlank()) {
