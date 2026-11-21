@@ -32,6 +32,9 @@ import ar.edu.unju.fi.poo.repository.ProductoRepository;
 import ar.edu.unju.fi.poo.repository.VentaRepository;
 import ar.edu.unju.fi.poo.service.impl.VentaServiceImpl;
 
+import ar.edu.unju.fi.poo.exception.SolicitudInvalidaException;
+import ar.edu.unju.fi.poo.exception.StockInsuficienteException;
+
 @ExtendWith(MockitoExtension.class)
 class VentaServiceTest {
 
@@ -208,5 +211,130 @@ class VentaServiceTest {
         assertEquals(ModalidadPago.CONTADO, resultado.get(0).getModalidadPago());
 
         verify(ventaRepository).findAll();
+    }
+    @Test
+    void registrarVentaContadoConDescuentoValidoAplicaDescuento() {
+        VentaRequestDTO requestConDescuento = new VentaRequestDTO(
+            1L,
+            ModalidadPago.CONTADO,
+            "COMP-010",
+            List.of(new ItemVentaRequestDTO(1L, 2)),
+            true,
+            15L,
+            0L
+        );
+
+        VentaContado guardadaConDescuento = new VentaContado();
+        guardadaConDescuento.setId(10L);
+        guardadaConDescuento.setCodigoComprobante("COMP-010");
+        guardadaConDescuento.setFecha(LocalDate.now());
+        guardadaConDescuento.setCliente(cliente);
+        guardadaConDescuento.setCuponDescuentoValido(true);
+        guardadaConDescuento.setSubtotal(2000L);
+        guardadaConDescuento.setMontoDescuento(300L);
+        guardadaConDescuento.setTotal(1700L);
+        agregarDetalleDePrueba(guardadaConDescuento);
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
+        when(productoRepository.save(any(Producto.class))).thenReturn(producto);
+        when(ventaRepository.save(any(VentaContado.class))).thenReturn(guardadaConDescuento);
+
+        VentaResponseDTO resultado = ventaService.registrarVentaContado(requestConDescuento);
+
+        assertNotNull(resultado);
+        assertEquals(2000L, resultado.getSubtotal());
+        assertEquals(300L, resultado.getMontoDescuento());
+        assertEquals(1700L, resultado.getTotal());
+        assertEquals(8, producto.getStock());
+    }
+
+    @Test
+    void registrarVentaContadoConPorcentajeInvalidoLanzaExcepcion() {
+        VentaRequestDTO requestInvalido = new VentaRequestDTO(
+            1L,
+            ModalidadPago.CONTADO,
+            "COMP-011",
+            List.of(new ItemVentaRequestDTO(1L, 1)),
+            true,
+            120L,
+            0L
+        );
+
+        assertThrows(SolicitudInvalidaException.class,
+            () -> ventaService.registrarVentaContado(requestInvalido));
+
+        verify(ventaRepository, never()).save(any());
+    }
+
+    @Test
+    void registrarVentaSinStockSuficienteLanzaStockInsuficienteException() {
+        producto.setStock(1);
+        VentaRequestDTO requestSinStock = new VentaRequestDTO(
+            1L,
+            ModalidadPago.CONTADO,
+            "COMP-012",
+            List.of(new ItemVentaRequestDTO(1L, 3)),
+            false,
+            0L,
+            0L
+        );
+
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
+
+        assertThrows(StockInsuficienteException.class,
+            () -> ventaService.registrarVentaContado(requestSinStock));
+
+        verify(ventaRepository, never()).save(any());
+    }
+
+    @Test
+    void registrarVentaFinanciadaGeneraSeisCuotas() {
+        when(clienteRepository.findById(1L)).thenReturn(Optional.of(cliente));
+        when(productoRepository.findById(1L)).thenReturn(Optional.of(producto));
+        when(productoRepository.save(any(Producto.class))).thenReturn(producto);
+        when(ventaRepository.save(any(VentaFinanciada.class)))
+            .thenAnswer(invocation -> invocation.getArgument(0));
+
+        VentaResponseDTO resultado = ventaService.registrarVentaFinanciada(requestFinanciada);
+
+        assertNotNull(resultado);
+        assertEquals(1000L, resultado.getSubtotal());
+        assertEquals(1100L, resultado.getTotal());
+        assertEquals(6, resultado.getCuotas().size());
+        verify(ventaRepository, times(2)).save(any(VentaFinanciada.class));
+    }
+
+    @Test
+    void consultarVentasPorClienteConIdInvalidoLanzaExcepcion() {
+        assertThrows(SolicitudInvalidaException.class,
+            () -> ventaService.consultarVentasPorCliente(0L));
+
+        verify(ventaRepository, never()).findByClienteId(any());
+    }
+
+    @Test
+    void consultarVentasPorRangoFechasConInicioPosteriorAFinLanzaExcepcion() {
+        LocalDate hoy = LocalDate.now();
+
+        assertThrows(SolicitudInvalidaException.class,
+            () -> ventaService.consultarVentasPorRangoFechas(hoy.plusDays(1), hoy));
+
+        verify(ventaRepository, never()).findByFechaBetween(any(), any());
+    }
+
+    @Test
+    void filtrarPorModalidadFinanciadaYModalidadInvalida() {
+        when(ventaRepository.findAll())
+            .thenReturn(Arrays.asList(ventaContado, ventaFinanciada));
+
+        List<VentaResponseDTO> financiadas = ventaService.filtrarPorModalidad("FINANCIADA");
+
+        assertEquals(1, financiadas.size());
+        assertEquals(ModalidadPago.FINANCIADA, financiadas.get(0).getModalidadPago());
+
+        assertThrows(SolicitudInvalidaException.class,
+            () -> ventaService.filtrarPorModalidad("TARJETA"));
     }
 }
