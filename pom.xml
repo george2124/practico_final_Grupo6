@@ -65,6 +65,13 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+		<!-- Base de datos en memoria para pruebas de integración -->
+		<dependency>
+		    <groupId>com.h2database</groupId>
+		    <artifactId>h2</artifactId>
+		    <scope>test</scope>
+		</dependency>
+		
 		<!-- Dependencia para usar Lombok -->
 		<dependency>
     		<groupId>org.projectlombok</groupId>
