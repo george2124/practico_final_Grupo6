@@ -108,14 +108,6 @@ public class CuotaServiceImpl implements CuotaService {
 
         LocalDate fechaActual = LocalDate.now();
 
-        if (fechaActual.isBefore(siguienteCuota.getFechaVencimiento())) {
-            throw new SolicitudInvalidaException(
-                    "No se puede cobrar la cuota "
-                    + siguienteCuota.getNumeroCuota()
-                    + " porque su fecha de vencimiento es futura: "
-                    + siguienteCuota.getFechaVencimiento());
-        }
-
         if (fechaActual.isAfter(siguienteCuota.getFechaVencimiento())) {
             siguienteCuota.setEstado(EstadoCuota.VENCIDA);
         }
