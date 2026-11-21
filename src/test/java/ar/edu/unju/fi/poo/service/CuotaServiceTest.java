@@ -19,7 +19,6 @@ import ar.edu.unju.fi.poo.dto.CuotaResponseDTO;
 import ar.edu.unju.fi.poo.dto.EstadoCuentaResponseDTO;
 import ar.edu.unju.fi.poo.enums.EstadoCuota;
 import ar.edu.unju.fi.poo.enums.TipoCliente;
-import ar.edu.unju.fi.poo.exception.SolicitudInvalidaException;
 import ar.edu.unju.fi.poo.model.Cliente;
 import ar.edu.unju.fi.poo.model.Cuota;
 import ar.edu.unju.fi.poo.model.VentaFinanciada;
@@ -131,6 +130,7 @@ class CuotaServiceTest {
         assertNotNull(resultado);
         assertEquals(1, resultado.getNumeroCuota());
         assertEquals(EstadoCuota.PAGADA, cuota1.getEstado());
+        assertEquals(EstadoCuota.ADEUDADA, cuota2.getEstado());
 
         assertFalse(venta.isSaldada());
 
@@ -139,7 +139,7 @@ class CuotaServiceTest {
     }
 
     @Test
-    void noPermitirCobrarCuotaFutura() {
+    void cobrarCuotaCorrelativaEnFechaPreviaExitosamente() {
 
         cuota1.setFechaVencimiento(LocalDate.now().plusDays(5));
 
@@ -149,15 +149,24 @@ class CuotaServiceTest {
         when(cuotaRepository.buscarCuotasPorVenta(10L))
                 .thenReturn(Arrays.asList(cuota1, cuota2));
 
-        assertThrows(
-                SolicitudInvalidaException.class,
-                () -> cuotaService.cobrarSiguienteCuota(10L)
-        );
+        when(cuotaRepository.save(cuota1))
+                .thenReturn(cuota1);
 
-        assertEquals(EstadoCuota.ADEUDADA, cuota1.getEstado());
+        when(ventaRepository.save(venta))
+                .thenReturn(venta);
 
-        verify(cuotaRepository, never()).save(any());
-        verify(ventaRepository, never()).save(any());
+        CuotaResponseDTO resultado =
+                cuotaService.cobrarSiguienteCuota(10L);
+
+        assertNotNull(resultado);
+        assertEquals(1, resultado.getNumeroCuota());
+        assertEquals(25000, cuota1.getImporteAPagar());
+        assertEquals(EstadoCuota.PAGADA, cuota1.getEstado());
+        assertEquals(EstadoCuota.ADEUDADA, cuota2.getEstado());
+        assertFalse(venta.isSaldada());
+
+        verify(cuotaRepository).save(cuota1);
+        verify(ventaRepository).save(venta);
     }
 
     @Test
