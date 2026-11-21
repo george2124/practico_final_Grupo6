@@ -83,15 +83,18 @@ public class ClienteServiceImpl implements ClienteService {
     }
 
     private ClienteResponseDTO mapearAResponseDTO(Cliente cliente) {
-        return new ClienteResponseDTO(
-                cliente.getId(),
-                cliente.getIdentificacion(),
-                cliente.getNombre(),
-                cliente.getApellidoRazonSocial(),
-                cliente.getTelefono(),
-                cliente.getEmail(),
-                cliente.getDireccion(),
-                cliente.getTipoCliente()
-        );
+
+        ClienteResponseDTO response = new ClienteResponseDTO();
+
+        response.setId(cliente.getId());
+        response.setIdentificador(cliente.getIdentificacion());
+        response.setNombre(cliente.getNombre());
+        response.setApellidoRazonSocial(cliente.getApellidoRazonSocial());
+        response.setTelefono(cliente.getTelefono());
+        response.setEmail(cliente.getEmail());
+        response.setDireccion(cliente.getDireccion());
+        response.setTipoCliente(cliente.getTipoCliente());
+
+        return response;
     }
 }

@@ -48,15 +48,15 @@ class ClienteServiceTest {
             TipoCliente.PARTICULAR
         );
 
-        requestDTO = new ClienteRequestDTO(
-            "12345678",
-            "Juan",
-            "Perez",
-            "3884123456",
-            "juan@mail.com",
-            "San Pedro",
-            TipoCliente.PARTICULAR
-        );
+        requestDTO = new ClienteRequestDTO();
+
+        requestDTO.setIdentificador("12345678");
+        requestDTO.setNombre("Juan");
+        requestDTO.setApellidoRazonSocial("Perez");
+        requestDTO.setTelefono("3884123456");
+        requestDTO.setEmail("juan@mail.com");
+        requestDTO.setDireccion("San Pedro");
+        requestDTO.setTipoCliente(TipoCliente.PARTICULAR);
     }
 
     @Test
