@@ -36,18 +36,18 @@ public class ClienteResponseDTO {
 	@Schema(description = "Tipo de cliente", example = "MINORISTA")
 	private TipoCliente tipoCliente;
 
-	public ClienteResponseDTO(long id, String identificador, String nombre, String apellidoRazonSocial, String telefono,
-			String email, String direccion, TipoCliente tipoCliente) {
-		super();
-		this.id = id;
-		this.identificador = identificador;
-		this.nombre = nombre;
-		this.apellidoRazonSocial = apellidoRazonSocial;
-		this.telefono = telefono;
-		this.email = email;
-		this.direccion = direccion;
-		this.tipoCliente = tipoCliente;
-	}
+	//public ClienteResponseDTO(long id, String identificador, String nombre, String apellidoRazonSocial, String telefono,
+		//	String email, String direccion, TipoCliente tipoCliente) {
+		//super();
+		//this.id = id;
+		//this.identificador = identificador;
+		//this.nombre = nombre;
+		//this.apellidoRazonSocial = apellidoRazonSocial;
+		//this.telefono = telefono;
+		//this.email = email;
+		//this.direccion = direccion;
+		//this.tipoCliente = tipoCliente;
+	//}
 
 	public long getId() {
 		return id;
